@@ -1,5 +1,6 @@
 ﻿using IdentityDemo.Application.Users;
 using IdentityDemo.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityDemo.Web;
@@ -16,8 +17,19 @@ public class Program
         builder.Services.AddDbContext<ApplicationContext>(
             o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        var app = builder.Build();
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        {
+            options.Password.RequiredLength = 8;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireDigit = true;
+        })
+            .AddEntityFrameworkStores<ApplicationContext>()
+            .AddDefaultTokenProviders();
 
+        builder.Services.ConfigureApplicationCookie(o => o.LoginPath = "/login");
+
+        var app = builder.Build();
+        app.UseAuthorization();
         app.UseHttpsRedirection();
         app.MapControllers();
 
