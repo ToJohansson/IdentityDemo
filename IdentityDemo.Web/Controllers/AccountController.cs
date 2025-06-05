@@ -42,8 +42,10 @@ public class AccountController(IUserService userService) : Controller
             return View();
         }
 
+        await userService.SignInAsync(viewModel.Email, viewModel.Password);
+
         // Redirect user
-        return RedirectToAction(nameof(Login));
+        return RedirectToAction(nameof(Members));
     }
 
     [HttpGet("login")]
@@ -69,5 +71,16 @@ public class AccountController(IUserService userService) : Controller
 
         // Redirect user
         return RedirectToAction(nameof(Members));
+    }
+
+    [Authorize]
+    [HttpGet("logout")]
+    public async Task<IActionResult> LogoutAsync()
+    {
+        // Sign out user
+        await userService.SignOutAsync();
+        
+        // Redirect to home page
+        return RedirectToAction("Login");
     }
 }
