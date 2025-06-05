@@ -28,8 +28,9 @@ public class IdentityUserService(UserManager<ApplicationUser> userManager,
         return new UserResultDto(result.Errors.FirstOrDefault()?.Description);
     }
 
-    public Task<UserResultDto> SignInAsync(string email, string password)
+    public async Task<UserResultDto> SignInAsync(string email, string password)
     {
-        throw new NotImplementedException();
+        var result = await signInManager.PasswordSignInAsync(email, password, false, false);
+        return new UserResultDto(result.Succeeded ? null : "Invalid user credentials");
     }
 }
