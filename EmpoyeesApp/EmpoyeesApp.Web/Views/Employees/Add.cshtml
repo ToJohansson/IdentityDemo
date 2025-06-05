@@ -1,0 +1,35 @@
+﻿@model EmpoyeesApp.Web.Models.Employee;
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add</title>
+</head>
+<body>
+    <header>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+
+    </header>
+    <h1>Add new employee</h1>
+    <form asp-action="add" asp-controller="employees">
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div>
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html>

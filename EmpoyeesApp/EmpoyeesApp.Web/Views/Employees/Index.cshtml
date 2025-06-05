@@ -1,0 +1,41 @@
+﻿@model EmpoyeesApp.Web.Models.Employee[]
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html>
+<head>
+    <title>index</title>
+    <link rel="stylesheet" href="https://unpkg.com/@@picocss/pico@@latest/css/pico.classless.min.css">
+
+</head>
+
+<body>
+    <header>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+    </header>
+    <ul>
+    @foreach (var e in Model)
+    {
+        <li>
+            <span>
+                <a asp-controller="employees" asp-action="details">@e.Name</a>
+            </span>
+            <p>@e.Email</p>
+            <span>
+                <a asp-controller="employees" 
+                asp-action="delete" 
+                asp-route-id=@e.Id>
+                    Delete employee
+                </a>
+            </span>
+        </li>
+    }
+    </ul>
+    <a href="@Url.Action("add", "Employees")">Add a new employee</a>
+
+</body>
+    </html>

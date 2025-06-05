@@ -1,0 +1,34 @@
+﻿@model DemoAspNet.Web.Models.Person[]
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    <link rel="stylesheet" href="https://unpkg.com/@@picocss/pico@@latest/css/pico.classless.min.css">
+
+</head>
+<body>
+    <header>
+        <h1>Persons</h1>
+    </header>
+    <main>
+        <ol>
+            @foreach (var item in Model)
+            {
+                <li>
+                    <span>
+                        <p>
+                            <strong>
+                                @item.Name
+                            </strong>
+                        </p>
+                        <form method="post" asp-action="Delete" asp-route-id="@item.Id">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </span>
+                </li>
+            }
+        </ol>
+    </main>
+</body>
+</html>
