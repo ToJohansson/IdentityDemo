@@ -27,8 +27,7 @@ public class IdentityUserService(UserManager<ApplicationUser> userManager,
         var result = await userManager.CreateAsync(_user, password
         );
         await userManager.AddClaimsAsync(_user, [
-            new Claim("firstName", _user.FirstName),
-            new Claim("lastName", _user.LastName)
+            new Claim("firstName", _user.FirstName + " " + _user.LastName),
             ]);
         return new UserResultDto(result.Errors.FirstOrDefault()?.Description);
     }
