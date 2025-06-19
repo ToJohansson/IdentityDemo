@@ -11,7 +11,7 @@ namespace Companies.API.Data
 
         {
 
-            var db = serviceProvider.GetRequiredService<TournametContext>();
+            var db = serviceProvider.GetRequiredService<TournamentContext>();
 
             await db.Database.MigrateAsync();
             if (await db.TournamentDetails.AnyAsync())

@@ -7,9 +7,9 @@ using Tournament.Core.Entities;
 
 namespace Tournamet.Api.Data;
 
-public class TournametContext : DbContext
+public class TournamentContext : DbContext
 {
-    public TournametContext(DbContextOptions<TournametContext> options)
+    public TournamentContext(DbContextOptions<TournamentContext> options)
         : base(options)
     {
     }

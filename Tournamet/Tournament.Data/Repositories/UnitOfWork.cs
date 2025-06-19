@@ -7,9 +7,9 @@ using Tournament.Core.Repositories;
 using Tournamet.Api.Data;
 
 namespace Tournament.Data.Repositories;
-public class UnitOfWork(TournametContext context,
-    TournamentRepository tournamentRepository,
-    GameRepository gameRepository)
+public class UnitOfWork(TournamentContext context,
+    ITournamentRepository tournamentRepository,
+    IGameRepository gameRepository)
     : IUnitOfWork
 {
     public ITournamentRepository TournamentRepository { get; } = tournamentRepository;

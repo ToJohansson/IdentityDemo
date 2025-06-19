@@ -8,7 +8,7 @@ using Tournament.Core.Repositories;
 using Tournamet.Api.Data;
 
 namespace Tournament.Data.Repositories;
-public class GameRepository(TournametContext context) : IGameRepository
+public class GameRepository(TournamentContext context) : IGameRepository
 {
     public void Add(Game tournament)
     {
