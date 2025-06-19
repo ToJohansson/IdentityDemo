@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace Tournamet.Api.Controllers
 {
     [Route("api/tournament/{tournamentId:int}/games")]
     [ApiController]
-    public class GamesController(TournamentContext context, IUnitOfWork unitOfWork) : ControllerBase
+    public class GamesController(TournamentContext context, IUnitOfWork unitOfWork, IMapper mapper) : ControllerBase
     {
 
         // GET: api/Games

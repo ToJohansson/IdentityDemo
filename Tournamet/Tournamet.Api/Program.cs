@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tournament.Core.Repositories;
+using Tournament.Data.Data;
 using Tournament.Data.Repositories;
 using Tournamet.Api.Data;
 using Tournamet.Api.Extensions;
@@ -23,6 +24,7 @@ namespace Tournamet.Api
                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                })
                 .AddXmlDataContractSerializerFormatters();
+            builder.Services.AddAutoMapper(typeof(TournamentMappings));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

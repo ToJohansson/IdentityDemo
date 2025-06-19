@@ -1,18 +1,23 @@
-﻿using System;
+﻿using AutoMapper.QueryableExtensions;
+using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tournament.Core.Dto;
 using Tournament.Core.Entities;
 using Tournament.Core.Repositories;
 using Tournamet.Api.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Tournament.Data.Repositories;
-public class TournamentRepository(TournamentContext context) : ITournamentRepository
+public class TournamentRepository(TournamentContext context, IMapper mapper) : ITournamentRepository
 {
     public void Add(TournamentDetails tournament)
     {
-        throw new NotImplementedException();
+        context.Add(tournament);
     }
 
     public Task<bool> AnyAsync(int id)
@@ -20,15 +25,23 @@ public class TournamentRepository(TournamentContext context) : ITournamentReposi
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<TournamentDetails>> GetAllAsync()
+    public async Task<IEnumerable<TournamentDto>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await context.TournamentDetails.ProjectTo<TournamentDto>(mapper.ConfigurationProvider).ToListAsync();
     }
 
-    public Task<TournamentDetails> GetAsync(int id)
+    public async Task<TournamentDto?> GetAsync(int id)
     {
-        throw new NotImplementedException();
+        var tournament = await context.TournamentDetails
+            .Include(t => t.Games)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
+        if (tournament == null)
+            return null;
+
+        return mapper.Map<TournamentDto>(tournament);
     }
+
 
     public void Remove(TournamentDetails tournament)
     {
@@ -39,4 +52,6 @@ public class TournamentRepository(TournamentContext context) : ITournamentReposi
     {
         throw new NotImplementedException();
     }
+
+
 }
