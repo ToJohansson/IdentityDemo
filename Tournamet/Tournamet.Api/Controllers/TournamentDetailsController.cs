@@ -16,7 +16,7 @@ namespace Tournamet.Api.Controllers
 {
     [Route("api/tournament")]
     [ApiController]
-    public class TournamentDetailsController(TournamentContext context, IUnitOfWork unitOfWork, IMapper mapper) : ControllerBase
+    public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBase
     {
 
         // GET: api/TournamentDetails
@@ -41,31 +41,13 @@ namespace Tournamet.Api.Controllers
 
         // PUT: api/TournamentDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTournamentDetails(int id, TournamentDetails tournamentDetails)
+        [HttpPut("")]
+        public async Task<IActionResult> PutTournamentDetails(TournamentUpdateDto tournamentDetails)
         {
-            if (id != tournamentDetails.Id)
-            {
-                return BadRequest();
-            }
 
-            unitOfWork.TournamentRepository.Update(tournamentDetails);
+            await unitOfWork.TournamentRepository.Update(tournamentDetails);
 
-            try
-            {
-                await unitOfWork.PersistAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TournamentDetailsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await unitOfWork.PersistAsync();
 
             return NoContent();
         }
@@ -85,26 +67,13 @@ namespace Tournamet.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTournamentDetails(int id)
         {
-            var tournamentDetails = await context.TournamentDetails
-                .Include(t => t.Games)
-                .FirstOrDefaultAsync(t => t.Id == id);
 
-            if (tournamentDetails == null)
-            {
-                return NotFound();
-            }
-
-            context.TournamentDetails.Remove(tournamentDetails);
+            unitOfWork.TournamentRepository.Remove(id);
             await unitOfWork.PersistAsync();
 
             return NoContent();
         }
 
-        private bool TournamentDetailsExists(int id)
-        {
-            return context.TournamentDetails
-                .Include(t => t.Games)
-                .Any(e => e.Id == id);
-        }
+
     }
 }

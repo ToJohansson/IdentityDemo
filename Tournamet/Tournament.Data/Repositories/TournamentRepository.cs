@@ -15,9 +15,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Tournament.Data.Repositories;
 public class TournamentRepository(TournamentContext context, IMapper mapper) : ITournamentRepository
 {
-    public void Add(TournamentDetails tournament)
+    public async Task Add(TournamentDetails tournament)
     {
-        context.Add(tournament);
+        await context.AddAsync(tournament);
     }
 
     public Task<bool> AnyAsync(int id)
@@ -43,15 +43,35 @@ public class TournamentRepository(TournamentContext context, IMapper mapper) : I
     }
 
 
-    public void Remove(TournamentDetails tournament)
+    public async Task Remove(int id)
     {
-        throw new NotImplementedException();
+        var tournament = await TournamentDetailsExists(id);
+
+        if (tournament == null)
+            throw new Exception("Tournament not found");
+
+        context.TournamentDetails.Remove(tournament);
     }
 
-    public void Update(TournamentDetails tournament)
+    public async Task Update(TournamentUpdateDto tournament)
     {
-        throw new NotImplementedException();
+        var existing = await context.TournamentDetails
+            .Include(t => t.Games)
+            .FirstOrDefaultAsync(t => t.Id == tournament.Id);
+
+        if (existing == null)
+            throw new Exception("Tournament not found");
+
+        // Update properties
+        mapper.Map(tournament, existing);
     }
 
+
+    private async Task<TournamentDetails?> TournamentDetailsExists(int id)
+    {
+        return await context.TournamentDetails
+           .Include(t => t.Games)
+           .FirstOrDefaultAsync(t => t.Id == id);
+    }
 
 }

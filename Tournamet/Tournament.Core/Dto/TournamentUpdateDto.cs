@@ -5,9 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Tournament.Core.Dto;
-public record GameDto
+public record TournamentUpdateDto(int Id, string Title, DateTime Startdate)
 {
-    public int Id { get; init; }
-    public string Title { get; init; }
-    public DateTime Time { get; init; }
+    public DateTime EndDate => Startdate.AddMonths(3);
 }

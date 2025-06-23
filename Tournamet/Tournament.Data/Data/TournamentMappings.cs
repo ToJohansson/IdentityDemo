@@ -16,6 +16,11 @@ public class TournamentMappings : Profile
 
 
         CreateMap<Core.Entities.Game, Core.Dto.GameDto>();
+        CreateMap<Core.Dto.GameDto, Core.Entities.Game>();
+        CreateMap<Core.Dto.TournamentUpdateDto, Core.Entities.TournamentDetails>()
+            .ForMember(dest => dest.Games, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Startdate));
 
     }
 }

@@ -21,7 +21,7 @@ namespace Tournamet.Api
             builder.Services.AddControllers(opt => opt.ReturnHttpNotAcceptable = true)
                .AddNewtonsoftJson(options =>
                {
-                   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Delete this later
                })
                 .AddXmlDataContractSerializerFormatters();
             builder.Services.AddAutoMapper(typeof(TournamentMappings));

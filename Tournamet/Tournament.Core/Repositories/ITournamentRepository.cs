@@ -12,7 +12,7 @@ public interface ITournamentRepository
     Task<IEnumerable<TournamentDto>> GetAllAsync();
     Task<TournamentDto> GetAsync(int id);
     Task<bool> AnyAsync(int id);
-    void Add(TournamentDetails tournament);
-    void Update(TournamentDetails tournament);
-    void Remove(TournamentDetails tournament);
+    Task Add(TournamentDetails tournament);
+    Task Update(TournamentUpdateDto tournament);
+    Task Remove(int id);
 }
