@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tournament.Core.Dto;
@@ -69,7 +70,6 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
     }
 
 
-
     //// DELETE: api/Games/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(int id)
@@ -80,4 +80,41 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
         return NoContent();
     }
 
+
+    /// <summary>
+    /// Partially updates a game.
+    /// </summary>
+    /// <remarks>
+    /// These three values are required in the JSON body: delete the other properties.
+    /// Sample request:
+    /// [
+    ///   {
+    ///     "op": "replace",
+    ///     "path": "/title",
+    ///     "value": "New Title"
+    ///   }
+    /// ]
+    /// </remarks>
+    [HttpPatch("{id:int}")]
+    public async Task<IActionResult> PatchGame(
+        [FromRoute] int tournamentId,
+         int id,
+        JsonPatchDocument<GameDto> patchDocument)
+    {
+        if (patchDocument is null)
+            return BadRequest("No patch document provided.");
+
+        var gameDto = await unitOfWork.GameRepository.GetAsync(id);
+        if (gameDto == null || gameDto.Id != id)
+            return NotFound("Game does not exist.");
+
+        patchDocument.ApplyTo(gameDto, ModelState);
+        if (!TryValidateModel(gameDto))
+            return UnprocessableEntity(ModelState);
+
+        await unitOfWork.GameRepository.Update(tournamentId, gameDto);
+        await unitOfWork.PersistAsync();
+
+        return NoContent();
+    }
 }
