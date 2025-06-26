@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Tournament.Core.Repositories;
-using Tournament.Data.Data;
-using Tournament.Data.Repositories;
-using Tournamet.Api.Data;
+using Tournament.Application.Interfaces;
+using Tournament.Infrastructure.Data;
+using Tournament.Infrastructure.Repositories;
 using Tournamet.Api.Extensions;
 
 namespace Tournamet.Api

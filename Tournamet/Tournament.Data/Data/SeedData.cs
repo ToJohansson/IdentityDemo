@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Tournament.Core.Entities;
-using Tournamet.Api.Data;
+using Tournamet.Domain.Entities;
 
-namespace Companies.API.Data
+namespace Tournament.Infrastructure.Data
 {
     public static class SeedData
     {

@@ -6,11 +6,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Tournament.Core.Dto;
-using Tournament.Core.Entities;
-using Tournament.Core.Repositories;
-using Tournamet.Api.Data;
+using Tournament.Application.Interfaces;
+using Tournamet.Domain.Entities;
+using Tournamet.Shared.Dto;
 
 namespace Tournamet.Api.Controllers;
 
@@ -30,7 +28,7 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
 
     //// GET: api/Games/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<GameDto>> GetGame(int id)
+    public async Task<ActionResult<GameDto>> GetGame(string id)
     {
         var game = await unitOfWork.GameRepository.GetAsync(id);
 
@@ -104,7 +102,7 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
         if (patchDocument is null)
             return BadRequest("No patch document provided.");
 
-        var gameDto = await unitOfWork.GameRepository.GetAsync(id);
+        var gameDto = await unitOfWork.GameRepository.GetByIdAsync(id);
         if (gameDto == null || gameDto.Id != id)
             return NotFound("Game does not exist.");
 

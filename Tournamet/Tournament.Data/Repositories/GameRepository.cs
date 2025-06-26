@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Core.Dto;
-using Tournament.Core.Entities;
-using Tournament.Core.Repositories;
-using Tournamet.Api.Data;
+using Tournament.Application.Interfaces;
+using Tournament.Infrastructure.Data;
+using Tournamet.Domain.Entities;
+using Tournamet.Shared.Dto;
 
-namespace Tournament.Data.Repositories;
+namespace Tournament.Infrastructure.Repositories;
 public class GameRepository(TournamentContext context, IMapper mapper) : IGameRepository
 {
     public async Task<Game> Add(int tournamentId, GameDto gameDto)
@@ -44,7 +44,16 @@ public class GameRepository(TournamentContext context, IMapper mapper) : IGameRe
             .ToListAsync();
     }
 
-    public async Task<GameDto?> GetAsync(int id)
+    public async Task<GameDto?> GetAsync(string id)
+    {
+        var loweredId = id.ToLower();
+        var game = await context.Game
+            .FirstOrDefaultAsync(g => g.Title.ToLower().Contains(loweredId));
+
+        return mapper.Map<GameDto>(game);
+    }
+
+    public async Task<GameDto?> GetByIdAsync(int id)
     {
         var game = await context.Game
             .FirstOrDefaultAsync(g => g.Id.Equals(id));

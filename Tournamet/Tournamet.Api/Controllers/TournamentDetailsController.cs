@@ -7,11 +7,10 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Tournament.Core.Dto;
-using Tournament.Core.Entities;
-using Tournament.Core.Repositories;
-using Tournamet.Api.Data;
+using Tournament.Application.Interfaces;
+using Tournamet.Domain.Entities;
+using Tournamet.Shared.Dto;
+
 
 namespace Tournamet.Api.Controllers;
 
@@ -22,9 +21,9 @@ public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBas
 
     // GET: api/TournamentDetails
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournamentDetails()
+    public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournamentDetails(bool includeGames)
     {
-        var tournaments = await unitOfWork.TournamentRepository.GetAllAsync();
+        var tournaments = await unitOfWork.TournamentRepository.GetAllAsync(includeGames);
         return Ok(tournaments);
     }
 

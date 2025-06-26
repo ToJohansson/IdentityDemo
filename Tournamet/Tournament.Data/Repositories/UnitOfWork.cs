@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Core.Repositories;
-using Tournamet.Api.Data;
+using Tournament.Application.Interfaces;
+using Tournament.Infrastructure.Data;
 
-namespace Tournament.Data.Repositories;
+namespace Tournament.Infrastructure.Repositories;
 public class UnitOfWork(TournamentContext context,
     ITournamentRepository tournamentRepository,
     IGameRepository gameRepository)

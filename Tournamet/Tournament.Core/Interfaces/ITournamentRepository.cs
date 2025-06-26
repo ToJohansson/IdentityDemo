@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Core.Dto;
-using Tournament.Core.Entities;
+using Tournamet.Domain.Entities;
+using Tournamet.Shared.Dto;
 
-namespace Tournament.Core.Repositories;
+namespace Tournament.Application.Interfaces;
 public interface ITournamentRepository
 {
-    Task<IEnumerable<TournamentDto>> GetAllAsync();
+    Task<IEnumerable<TournamentDto>> GetAllAsync(bool includeGames);
     Task<TournamentDto> GetAsync(int id);
     Task<bool> AnyAsync(int id);
     Task Add(TournamentDetails tournament);

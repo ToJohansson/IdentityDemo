@@ -1,4 +1,4 @@
-﻿using Companies.API.Data;
+﻿using Tournament.Infrastructure.Data;
 
 namespace Tournamet.Api.Extensions;
 

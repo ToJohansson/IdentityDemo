@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Core.Dto;
-using Tournament.Core.Entities;
-using Tournament.Core.Repositories;
-using Tournamet.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using Tournament.Infrastructure.Data;
+using Tournament.Application.Interfaces;
+using Tournamet.Shared.Dto;
+using Tournamet.Domain.Entities;
 
 
-namespace Tournament.Data.Repositories;
+namespace Tournament.Infrastructure.Repositories;
 public class TournamentRepository(TournamentContext context, IMapper mapper) : ITournamentRepository
 {
     public async Task Add(TournamentDetails tournament)
@@ -25,9 +25,13 @@ public class TournamentRepository(TournamentContext context, IMapper mapper) : I
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<TournamentDto>> GetAllAsync()
+    public async Task<IEnumerable<TournamentDto>> GetAllAsync(bool includeGames = false)
     {
-        return await context.TournamentDetails.ProjectTo<TournamentDto>(mapper.ConfigurationProvider).ToListAsync();
+        var tournament = includeGames ? mapper.Map<IEnumerable<TournamentDto>>(await context.TournamentDetails.Include(t => t.Games).ToListAsync())
+
+                            : mapper.Map<IEnumerable<TournamentDto>>(await context.TournamentDetails.ToListAsync());
+
+        return tournament;
     }
 
     public async Task<TournamentDto?> GetAsync(int id)

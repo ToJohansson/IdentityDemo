@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Tournament.Core.Entities;
+using Tournamet.Domain.Entities;
 
-namespace Tournamet.Api.Data;
+namespace Tournament.Infrastructure.Data;
 
 public class TournamentContext : DbContext
 {
@@ -14,6 +14,6 @@ public class TournamentContext : DbContext
     {
     }
 
-    public DbSet<Tournament.Core.Entities.TournamentDetails> TournamentDetails { get; set; } = default!;
-    public DbSet<Tournament.Core.Entities.Game> Game { get; set; } = default!;
+    public DbSet<TournamentDetails> TournamentDetails { get; set; } = default!;
+    public DbSet<Game> Game { get; set; } = default!;
 }

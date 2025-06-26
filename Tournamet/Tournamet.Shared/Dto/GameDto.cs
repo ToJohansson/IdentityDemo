@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tournament.Core.Dto;
+namespace Tournamet.Shared.Dto;
 public record GameDto
 {
     public int Id { get; init; }

@@ -1,7 +1,4 @@
-﻿
-using Tournament.Core.Repositories;
-
-namespace Tournament.Core.Repositories;
+﻿namespace Tournament.Application.Interfaces;
 
 public interface IUnitOfWork
 {

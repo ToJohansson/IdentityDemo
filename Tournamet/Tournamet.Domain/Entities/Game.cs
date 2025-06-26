@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tournament.Core.Entities;
+namespace Tournamet.Domain.Entities;
 public class Game
 {
     public int Id { get; set; }

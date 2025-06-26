@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tournament.Core.Entities;
 
-namespace Tournament.Core.Dto;
+namespace Tournamet.Shared.Dto;
 public record TournamentDto(int Id, string Title, DateTime Startdate)
 {
     public DateTime EndDate => Startdate.AddMonths(3);
