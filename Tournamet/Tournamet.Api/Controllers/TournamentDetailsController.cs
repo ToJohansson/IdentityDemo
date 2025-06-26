@@ -16,14 +16,14 @@ namespace Tournamet.Api.Controllers;
 
 [Route("api/tournament")]
 [ApiController]
-public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBase
+public class TournamentDetailsController(ITournamentService service) : ControllerBase
 {
 
     // GET: api/TournamentDetails
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournamentDetails(bool includeGames)
     {
-        var tournaments = await unitOfWork.TournamentRepository.GetAllAsync(includeGames);
+        var tournaments = await service.GetAllAsync(includeGames);
         return Ok(tournaments);
     }
 
@@ -31,7 +31,7 @@ public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBas
     [HttpGet("{id}")]
     public async Task<ActionResult<TournamentDto>> GetTournamentDetails(int id)
     {
-        var tournamentDetails = await unitOfWork.TournamentRepository.GetAsync(id);
+        var tournamentDetails = await service.GetAsync(id);
         if (tournamentDetails == null)
         {
             return NotFound();
@@ -44,10 +44,7 @@ public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBas
     [HttpPut("")]
     public async Task<IActionResult> PutTournamentDetails(TournamentUpdateDto tournamentDetails)
     {
-
-        await unitOfWork.TournamentRepository.Update(tournamentDetails);
-
-        await unitOfWork.PersistAsync();
+        await service.Update(tournamentDetails);
 
         return NoContent();
     }
@@ -57,8 +54,7 @@ public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBas
     [HttpPost]
     public async Task<ActionResult<TournamentDetails>> PostTournamentDetails(TournamentDetails tournamentDetails)
     {
-        unitOfWork.TournamentRepository.Add(tournamentDetails);
-        await unitOfWork.PersistAsync();
+        await service.Add(tournamentDetails);
 
         return CreatedAtAction("GetTournamentDetails", new { id = tournamentDetails.Id }, tournamentDetails);
     }
@@ -67,9 +63,7 @@ public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBas
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTournamentDetails(int id)
     {
-
-        unitOfWork.TournamentRepository.Remove(id);
-        await unitOfWork.PersistAsync();
+       await service.Remove(id);
 
         return NoContent();
     }
@@ -94,7 +88,7 @@ public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBas
         if (patchDoc == null)
             return BadRequest("No patch document provided.");
 
-        var tournamentDto = await unitOfWork.TournamentRepository.GetAsync(id);
+        var tournamentDto = await service.GetAsync(id);
         if (tournamentDto == null)
             return NotFound();
 
@@ -109,8 +103,7 @@ public class TournamentDetailsController(IUnitOfWork unitOfWork) : ControllerBas
         if (!TryValidateModel(updateDto))
             return UnprocessableEntity(ModelState);
 
-        await unitOfWork.TournamentRepository.Update(updateDto);
-        await unitOfWork.PersistAsync();
+        await service.Update(updateDto);
 
         return NoContent();
     }

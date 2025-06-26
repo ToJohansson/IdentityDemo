@@ -8,11 +8,12 @@ using Tournamet.Domain.Entities;
 using Tournamet.Shared.Dto;
 
 namespace Tournament.Application.Services;
-public class TournamentService(ITournamentRepository tournamentRepository) : ITournamentService
+public class TournamentService(IUnitOfWork unitOfWork) : ITournamentService
 {
-    public Task Add(TournamentDetails tournament)
+    public async Task Add(TournamentDetails tournament)
     {
-        throw new NotImplementedException();
+        await unitOfWork.TournamentRepository.Add(tournament);
+        await IsPersisted();
     }
 
     public Task<bool> AnyAsync(int id)
@@ -22,21 +23,25 @@ public class TournamentService(ITournamentRepository tournamentRepository) : ITo
 
     public Task<IEnumerable<TournamentDto>> GetAllAsync(bool includeGames)
     {
-        throw new NotImplementedException();
+        return unitOfWork.TournamentRepository.GetAllAsync(includeGames);
     }
 
     public Task<TournamentDto> GetAsync(int id)
     {
-        throw new NotImplementedException();
+        return unitOfWork.TournamentRepository.GetAsync(id);
     }
 
-    public Task Remove(int id)
+    public async Task Remove(int id)
     {
-        throw new NotImplementedException();
+        await unitOfWork.TournamentRepository.Remove(id);
+        await IsPersisted();
     }
 
-    public Task Update(TournamentUpdateDto tournament)
+    public async Task Update(TournamentUpdateDto tournament)
     {
-        throw new NotImplementedException();
+        await unitOfWork.TournamentRepository.Update(tournament);
+        await IsPersisted();
     }
+    public async Task IsPersisted() => await unitOfWork.PersistAsync();
+
 }

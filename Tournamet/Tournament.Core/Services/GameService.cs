@@ -8,40 +8,46 @@ using Tournamet.Domain.Entities;
 using Tournamet.Shared.Dto;
 
 namespace Tournament.Application.Services;
-public class GameService(IGameRepository gameRepository) : IGameService
+public class GameService(IUnitOfWork unitOfWork) : IGameService
 {
-    public Task<Game> Add(int tournamentId, GameDto game)
+    public async Task<Game> Add(int tournamentId, GameDto game)
     {
-        throw new NotImplementedException();
+        return await unitOfWork.GameRepository.Add(tournamentId, game);
     }
 
-    public Task<bool> AnyAsync(int id)
+    public async Task<bool> AnyAsync(int id)
     {
         throw new NotImplementedException();
     }
 
     public Task<IEnumerable<GameDto>> GetAllAsync(int id)
     {
-        throw new NotImplementedException();
+        return unitOfWork.GameRepository.GetAllAsync(id);
     }
 
     public Task<GameDto> GetAsync(string id)
     {
-        throw new NotImplementedException();
+        return unitOfWork.GameRepository.GetAsync(id);
     }
 
     public Task<GameDto?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return unitOfWork.GameRepository.GetByIdAsync(id);
     }
 
-    public Task Remove(int game)
+
+    public async Task Remove(int game)
     {
-        throw new NotImplementedException();
+        await unitOfWork.GameRepository.Remove(game);
+        await IsPersisted();
     }
 
-    public Task Update(int tournamentId, GameDto game)
+    public async Task Update(int tournamentId, GameDto game)
     {
-        throw new NotImplementedException();
+        await unitOfWork.GameRepository.Update(tournamentId, game);
+        await IsPersisted();
+
     }
+    public async Task IsPersisted() => await unitOfWork.PersistAsync();
+
 }

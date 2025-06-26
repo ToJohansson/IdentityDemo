@@ -11,4 +11,5 @@ public interface ITournamentService
     Task Add(TournamentDetails tournament);
     Task Update(TournamentUpdateDto tournament);
     Task Remove(int id);
+
 }

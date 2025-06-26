@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Tournament.Application.Interfaces;
+using Tournament.Application.Services;
 using Tournament.Infrastructure.Data;
 using Tournament.Infrastructure.Repositories;
 using Tournamet.Api.Extensions;
@@ -31,6 +32,8 @@ namespace Tournamet.Api
 
             builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
             builder.Services.AddScoped<IGameRepository, GameRepository>();
+            builder.Services.AddScoped<ITournamentService, TournamentService>();
+            builder.Services.AddScoped<IGameService, GameService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();

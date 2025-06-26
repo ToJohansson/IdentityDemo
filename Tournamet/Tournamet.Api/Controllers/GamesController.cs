@@ -14,23 +14,37 @@ namespace Tournamet.Api.Controllers;
 
 [Route("api/tournament/{tournamentId:int}/games")]
 [ApiController]
-public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
+public class GamesController(IGameService service) : ControllerBase
 {
 
     // GET: api/Games
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GameDto>>> GetAllGames([FromRoute] int tournamentId)
     {
-        var games = await unitOfWork.GameRepository.GetAllAsync(tournamentId);
+        var games = await service.GetAllAsync(tournamentId);
         return Ok(games);
 
     }
 
     //// GET: api/Games/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<GameDto>> GetGame(string id)
+    [HttpGet("gametitle/{id}")]
+    public async Task<ActionResult<GameDto>> GetGameByTitle(string id)
     {
-        var game = await unitOfWork.GameRepository.GetAsync(id);
+        var game = await service.GetAsync(id);
+
+        if (game == null)
+        {
+            return NotFound();
+        }
+
+        return game;
+    }
+
+    //// GET: api/Games/5
+    [HttpGet("gameid/{id}")]
+    public async Task<ActionResult<GameDto>> GetByIdGame(int id)
+    {
+        var game = await service.GetByIdAsync(id);
 
         if (game == null)
         {
@@ -46,11 +60,11 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Game>> PostGame([FromRoute] int tournamentId, GameDto game)
     {
-        var createdGame = await unitOfWork.GameRepository.Add(tournamentId, game);
-        await unitOfWork.PersistAsync();
+        var createdGame = await service.Add(tournamentId, game);
+        await service.IsPersisted();
 
         return CreatedAtAction(
-            nameof(GetGame),
+            nameof(GetByIdGame),
             new { tournamentId = tournamentId, id = createdGame.Id },
             createdGame
         );
@@ -61,19 +75,18 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
     [HttpPut("")]
     public async Task<IActionResult> PutGame([FromRoute] int tournamentId, GameDto game)
     {
-        await unitOfWork.GameRepository.Update(tournamentId, game);
-        await unitOfWork.PersistAsync();
+        await service.Update(tournamentId, game);
 
         return NoContent();
     }
+
 
 
     //// DELETE: api/Games/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGame(int id)
     {
-        await unitOfWork.GameRepository.Remove(id);
-        await unitOfWork.PersistAsync();
+        await service.Remove(id);
 
         return NoContent();
     }
@@ -102,7 +115,7 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
         if (patchDocument is null)
             return BadRequest("No patch document provided.");
 
-        var gameDto = await unitOfWork.GameRepository.GetByIdAsync(id);
+        var gameDto = await service.GetByIdAsync(id);
         if (gameDto == null || gameDto.Id != id)
             return NotFound("Game does not exist.");
 
@@ -110,8 +123,8 @@ public class GamesController(IUnitOfWork unitOfWork) : ControllerBase
         if (!TryValidateModel(gameDto))
             return UnprocessableEntity(ModelState);
 
-        await unitOfWork.GameRepository.Update(tournamentId, gameDto);
-        await unitOfWork.PersistAsync();
+        await service.Update(tournamentId, gameDto);
+        await service.IsPersisted();
 
         return NoContent();
     }

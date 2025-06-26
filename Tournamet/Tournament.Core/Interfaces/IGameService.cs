@@ -12,4 +12,5 @@ public interface IGameService
     Task<Game> Add(int tournamentId, GameDto game);
     Task Update(int tournamentId, GameDto game);
     Task Remove(int game);
+    Task IsPersisted();
 }
